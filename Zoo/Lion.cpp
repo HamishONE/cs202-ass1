@@ -1,7 +1,5 @@
 #include "Lion.hpp"
 
-#include "Food.hpp"
-
 using namespace std;
 
 Lion::Lion() {
