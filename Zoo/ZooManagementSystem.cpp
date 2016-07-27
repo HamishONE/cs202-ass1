@@ -101,12 +101,6 @@ void ZooManagementSystem::resetAllAnimals() {
 	}
 }
 
-//////////////////////////// TASK 4 /////////////////////
-
-// For debug
-//#include <iostream>
-//string animalTypeToString(Animal::AnimalType animaltype);
-
 vector<unsigned int> animalsFed;
 
 bool isAlreadyFed(unsigned int animal_index) {
