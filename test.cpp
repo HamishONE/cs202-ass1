@@ -369,6 +369,231 @@ TestResult test_FeedAnimal() {
 
 #endif /*ENABLE_T3_TESTS*/
 
+/////////////// HAMISHS TESTS ////////////////////
+
+TestResult test_hamish_1() {
+	
+	//3.1.1
+	Food apple("Apple", 700.40, 121);
+	
+	//3.1.2
+	ASSERT(apple.getName() == "Apple");
+	EXPECT_SIGMA(apple.getCost(), 700.40);
+	ASSERT(apple.getQuantity() == 0);
+	ASSERT(apple.getEnergy() == 121);
+	
+	//3.1.3
+	ASSERT(apple.consume(0) == 0);
+	ASSERT(apple.consume(20) == 0);
+	ASSERT(apple.getQuantity() == 0);
+	
+	//3.1.4
+	apple.purchase(300);
+	ASSERT(apple.getQuantity() == 300);
+	ASSERT(apple.consume(40) == 40);
+	ASSERT(apple.getQuantity() == 260);
+	ASSERT(apple.consume(280) == 260);
+	ASSERT(apple.getQuantity() == 0);
+	
+    return TR_PASS;
+}
+
+TestResult test_hamish_2() {
+
+	//3.2 (Lion)
+	Animal *lion = new Lion();
+	ASSERT(lion->type() == Animal::AT_LION);
+	ASSERT(lion->hungerLevel() == 2200);
+	ASSERT(lion->likesFood(Food("steak",0,0)) == true);
+	ASSERT(lion->likesFood(Food("mouse",0,0)) == true); 
+	ASSERT(lion->likesFood(Food("fish",0,0)) == true);
+	ASSERT(lion->likesFood(Food("banana",0,0)) == false);
+	ASSERT(lion->likesFood(Food("watermelon",0,0)) == false); 
+	ASSERT(lion->likesFood(Food("mealworms",0,0)) == false);
+	ASSERT(lion->likesFood(Food("hay",0,0)) == false);
+	ASSERT(lion->likesFood(Food("egg",0,0)) == false);	
+	Food steak("steak",0,4);
+	steak.purchase(200);
+	ASSERT(lion->feed(steak) == 200);
+	ASSERT(steak.getQuantity() == 0);
+	ASSERT(lion->hungerLevel() == 1400);
+	lion->resetToHungry();
+	ASSERT(lion->hungerLevel() == 2200);
+	steak.purchase(600);
+	ASSERT(lion->feed(steak) == 550);
+	ASSERT(steak.getQuantity() == 50);
+	ASSERT(lion->hungerLevel() == 0);
+	lion->resetToHungry();
+	ASSERT(lion->hungerLevel() == 2200);
+	Food steak2("steak",0,2400);
+	steak2.purchase(1);
+	ASSERT(lion->feed(steak2) == 1);
+	ASSERT(steak2.getQuantity() == 0);
+	ASSERT(lion->hungerLevel() == 0);
+	lion->resetToHungry();
+	ASSERT(lion->hungerLevel() == 2200);
+	Food hay("hay",0,24);
+	hay.purchase(20);
+	ASSERT(lion->feed(hay) == 0);
+	ASSERT(hay.getQuantity() == 20);
+	ASSERT(lion->hungerLevel() == 2200);
+	
+    return TR_PASS;
+}
+
+
+TestResult test_hamish_3() {
+	
+	//3.3.1
+	ASSERT(ZooManagementSystem::author() == "hone075");
+	
+	//3.3.2
+	ZooManagementSystem zms(300.15);
+	EXPECT_SIGMA(zms.getBalance(), 300.15);
+	
+	//3.3.3
+	EXPECT_SIGMA(zms.admitVisitors(0,0), 0);
+	EXPECT_SIGMA(zms.getBalance(), 300.15);
+	EXPECT_SIGMA(zms.admitVisitors(1,0), 14);
+	EXPECT_SIGMA(zms.getBalance(), 314.15);
+	EXPECT_SIGMA(zms.admitVisitors(0,1), 5);
+	EXPECT_SIGMA(zms.admitVisitors(2,1), 33);
+	EXPECT_SIGMA(zms.admitVisitors(2,2), 30);
+	EXPECT_SIGMA(zms.admitVisitors(2,3), 35);
+	EXPECT_SIGMA(zms.admitVisitors(4,4), 60);
+	EXPECT_SIGMA(zms.admitVisitors(4,6), 70);
+	EXPECT_SIGMA(zms.getBalance(), 547.15);
+	
+	//3.3.4
+	ASSERT(zms.getFood().empty() == true);
+	Food pipe("pipe",30.15,700);
+	zms.addFood(pipe);
+	vector<Food> fd = zms.getFood();
+	ASSERT(fd.size() == 1);
+	ASSERT(fd[0].getName() == "pipe");
+	Food pipe2("pipe2",12.99,40);
+	zms.addFood(pipe2);
+	fd = zms.getFood();
+	ASSERT(fd.size() == 2);
+	ASSERT(fd[0].getName() == "pipe");
+	ASSERT(fd[1].getName() == "pipe2");
+	
+	//3.3.5
+	ASSERT(zms.getAnimals().empty() == true);
+	ASSERT(zms.addAnimal(Animal::AT_LION) == true);
+	vector<Animal*> an = zms.getAnimals();
+	ASSERT(an.size() == 1);
+	ASSERT(an[0]->type() == Animal::AT_LION);
+	ASSERT(zms.addAnimal(Animal::AT_SNAKE) == true);
+	an = zms.getAnimals();
+	ASSERT(an.size() == 2);
+	ASSERT(an[0]->type() == Animal::AT_LION);
+	ASSERT(an[1]->type() == Animal::AT_SNAKE);
+	ASSERT(zms.addAnimal(Animal::AT_INVALID) == false);
+	an = zms.getAnimals();
+	ASSERT(an.size() == 2);
+	
+	//3.3.6
+	Food steak("steak",0,1);
+	steak.purchase(200);
+	ASSERT(an[0]->feed(steak) == 200);
+	ASSERT(an[0]->hungerLevel() == 2000);	
+	Food mouse("mouse",0,1);
+	mouse.purchase(200);
+	ASSERT(an[1]->feed(mouse) == 200);
+	ASSERT(an[1]->hungerLevel() == 50);	
+	zms.resetAllAnimals();
+	an = zms.getAnimals();
+	ASSERT(an[0]->hungerLevel() == 2200);
+	ASSERT(an[1]->hungerLevel() == 250);	
+	
+	//3.3.7
+	
+	//3.3.8
+	double cost;
+	ZooManagementSystem zms3(10000);
+	Food apple("apple",30,700);
+	zms3.addFood(apple);
+	Food rock("rock",2000,600);
+	zms3.addFood(rock);
+	// Initial state
+	fd = zms3.getFood();
+	ASSERT(fd[0].getQuantity() == 0);
+	ASSERT(fd[1].getQuantity() == 0);
+	ASSERT(zms3.getBalance() == 10000);
+	// First purchase
+	ASSERT(zms3.purchaseFood(cost, 0, 30) == true);
+	EXPECT_SIGMA(cost, 900);
+	fd = zms3.getFood();
+	ASSERT(fd[0].getQuantity() == 30);
+	ASSERT(fd[1].getQuantity() == 0);
+	ASSERT(zms3.getBalance() == 9100);
+	// Second purchase
+	ASSERT(zms3.purchaseFood(cost, 0, 60) == true);
+	EXPECT_SIGMA(cost, 1800);
+	fd = zms3.getFood();
+	ASSERT(fd[0].getQuantity() == 90);
+	ASSERT(fd[1].getQuantity() == 0);
+	ASSERT(zms3.getBalance() == 7300);
+	// Index too high (borderline)
+	ASSERT(zms3.purchaseFood(cost, 2, 60) == false);
+	EXPECT_SIGMA(cost, 0);
+	fd = zms3.getFood();
+	ASSERT(fd[0].getQuantity() == 90);
+	ASSERT(fd[1].getQuantity() == 0);
+	ASSERT(zms3.getBalance() == 7300);
+	// Not enough money case
+	ASSERT(zms3.purchaseFood(cost, 1, 5) == false);
+	EXPECT_SIGMA(cost, 10000);
+	fd = zms3.getFood();
+	ASSERT(fd[0].getQuantity() == 90);
+	ASSERT(fd[1].getQuantity() == 0);
+	ASSERT(zms3.getBalance() == 7300);
+	
+	//3.3.9
+	ZooManagementSystem zms4(100000);
+	ASSERT(zms4.addAnimal(Animal::AT_LION) == true);
+	ASSERT(zms4.addAnimal(Animal::AT_SNAKE) == true);
+	Food f1("steak",1,440);
+	zms4.addFood(f1);
+	ASSERT(zms4.purchaseFood(cost, 0, 60) == true);
+	Food f2("mouse",1,200);
+	zms4.addFood(f2);
+	ASSERT(zms4.purchaseFood(cost, 1, 1) == true);
+	unsigned int quantity_eaten;
+	//case1
+	ASSERT(zms4.feedAnimal(quantity_eaten, 0, 0) == ZooManagementSystem::FR_SUCCESS);
+	ASSERT(quantity_eaten == 5);
+	//case2
+	ASSERT(zms4.feedAnimal(quantity_eaten, 2, 0) == ZooManagementSystem::FR_INVALID_ANIMAL);
+	ASSERT(quantity_eaten == 0);
+	//case3
+	ASSERT(zms4.feedAnimal(quantity_eaten, 0, 2) == ZooManagementSystem::FR_INVALID_FOOD);
+	ASSERT(quantity_eaten == 0);
+	//case4
+	ASSERT(zms4.feedAnimal(quantity_eaten, 2, 2) == ZooManagementSystem::FR_INVALID_ANIMAL);
+	ASSERT(quantity_eaten == 0);
+	//case5
+	ASSERT(zms4.feedAnimal(quantity_eaten, 1, 0) == ZooManagementSystem::FR_INCOMPATIBLE);
+	ASSERT(quantity_eaten == 0);
+	//case6
+	ASSERT(zms4.feedAnimal(quantity_eaten, 1, 1) == ZooManagementSystem::FR_EXHAUSTED); //snake to eat mouse
+	ASSERT(quantity_eaten == 1);
+	
+    return TR_PASS;
+	
+	/////////todo: use const variables
+}
+
+TestResult test_hamish_4() {
+	
+	ASSERT(1);
+	
+	return TR_PASS;
+}
+
+//////////////////////////////////////////////////
+
 /*
 This function collects up all the tests as a vector of function pointers. If you create your own
 tests and want to be able to run them, make sure you add them to the `tests` vector here.
@@ -396,6 +621,13 @@ vector<TestResult (*)()> generateTests() {
     tests.push_back(&test_PurchaseFood);
     tests.push_back(&test_FeedAnimal);
 #endif /*ENABLE_T3_TESTS*/
+
+	/////HAMISHS TESTS//////////////
+	tests.push_back(&test_hamish_1);
+	tests.push_back(&test_hamish_2);
+	tests.push_back(&test_hamish_3);
+	tests.push_back(&test_hamish_4);
+	////////////////////////////////
 
     return tests;
 }
