@@ -1,7 +1,5 @@
 #include "Animal.hpp"
 
-#include "Food.hpp"
-
 Animal::~Animal() {
 }
 
@@ -18,7 +16,7 @@ void Animal::resetToHungry() {
 }
 
 bool Animal::likesFood(const Food& food) const {
-    std::string name = food.getName();
+	std::string name = food.getName();
 	for (unsigned int i=0; i<3; i++) {
 		if (name.compare(foodsEaten[i]) == 0) return true;
 	}

@@ -2,8 +2,9 @@
 #define ANIMAL_HPP
 
 #include <string>
+#include "Food.hpp"
 
-class Food;
+//class Food; //TODO: ????????
 
 /*
 The Animal class is a pure virtual base class for all Animal classes. It defines the interface
@@ -67,6 +68,8 @@ public:
     doesn't like the food provided, none will be eaten.
     */
     virtual unsigned int feed(Food& food);
+	
+	void helper(const Food& food) const;
 
 	unsigned int hunger;
 	unsigned int defaultHunger;
