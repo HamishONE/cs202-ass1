@@ -587,8 +587,53 @@ TestResult test_hamish_3() {
 
 TestResult test_hamish_4() {
 	
-	ASSERT(1);
+	// useful vars
+	double cost;
+	vector<Animal*> animals;
+	ZooManagementSystem zms(1000000000000); //much moneys
 	
+	// Create 5 animals, checking for success
+	ASSERT(zms.addAnimal(Animal::AT_LION) == true);		// 2200 : steak,mouse,fish
+	ASSERT(zms.addAnimal(Animal::AT_SNAKE) == true);	// 250 : mouse,egg
+	ASSERT(zms.addAnimal(Animal::AT_MONKEY) == true);	// 800 : banana,watermelon,mealworms
+	ASSERT(zms.addAnimal(Animal::AT_OTTER) == true);	// 750 : fish,mouse
+	ASSERT(zms.addAnimal(Animal::AT_ELEPHANT) == true);	// 8400 : banana,watermelon,hay
+	
+	// Add all foods (all free of cost)
+	zms.addFood(Food("steak",0,0));		//0
+	zms.addFood(Food("mouse",0,1)); 	//1
+	zms.addFood(Food("fish",0,0));		//2
+	zms.addFood(Food("banana",0,0));	//3
+	zms.addFood(Food("watermelon",0,0));//4 
+	zms.addFood(Food("mealworms",0,0));	//5
+	zms.addFood(Food("hay",0,7600));	//6
+	zms.addFood(Food("egg",0,0));		//7
+	
+	// Add some mouse, should be eaten fully by lion then some for otter none for snake
+	ASSERT(zms.purchaseFood(cost, 1, 2300) == true); //buy 2300 mouse
+	zms.feedAllAnimals();
+	animals = zms.getAnimals();
+	ASSERT(animals[0]->hungerLevel() == 0); //lion
+	ASSERT(animals[3]->hungerLevel() == 650); //otter
+	ASSERT(animals[1]->hungerLevel() == 250); //snake
+	
+	zms.resetAllAnimals(); //now no food and animals hungry
+	
+	// Add enough hay such that elephant eats and is 800 hungry like monkey
+	ASSERT(zms.purchaseFood(cost, 6, 1) == true); //buy 1 hay
+	vector<Food> food = zms.getFood();
+	cout << "Food 6 Name = " << food[6].getName() << endl;
+	cout << "Food 6 Quantity = " << food[6].getQuantity() << endl;
+	cout << "Food 6 Energy = " << food[6].getEnergy() << endl;
+	zms.feedAllAnimals();
+	animals = zms.getAnimals();
+	ASSERT(animals[2]->hungerLevel() == 800); //monkey
+	
+	//cout << animals[4]->hungerLevel() << endl;
+	//cout << animals[4]->type() << endl; //2
+	//cout << animals[4]->likesFood(Food("hay",0,7600)) << endl; //1
+	ASSERT(animals[4]->hungerLevel() == 800); //elephant
+
 	return TR_PASS;
 }
 
