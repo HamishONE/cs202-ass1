@@ -70,7 +70,7 @@ public:
     virtual unsigned int feed(Food& food);
 	
 	void helper(const Food& food) const;
-
+protected:
 	unsigned int hunger;
 	unsigned int defaultHunger;
 	AnimalType animalType;
