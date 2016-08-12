@@ -15,6 +15,7 @@ ZooManagementSystem::~ZooManagementSystem() {
     for (unsigned int i=0; i<allAnimals.size(); i++) {
 		delete allAnimals[i];
 	}
+	allAnimals.clear();
 }
 
 string ZooManagementSystem::author() {
@@ -101,9 +102,7 @@ void ZooManagementSystem::resetAllAnimals() {
 	}
 }
 
-vector<unsigned int> animalsFed;
-
-bool isAlreadyFed(unsigned int animal_index) {
+bool isAlreadyFed(unsigned int animal_index, vector<unsigned int>& animalsFed) {
 	for (unsigned int i=0; i<animalsFed.size(); i++) {
 		if (animalsFed[i] == animal_index) return true;
 	}
@@ -111,6 +110,8 @@ bool isAlreadyFed(unsigned int animal_index) {
 }
 
 void ZooManagementSystem::feedAllAnimals() {
+
+	vector<unsigned int> animalsFed;
 	
 	// Continually look for hungry animals
 	// Loop no more times than the number of animals as protection from hanging
@@ -120,7 +121,7 @@ void ZooManagementSystem::feedAllAnimals() {
 		unsigned int animal_index = 0;
 		unsigned int hunger = 0;
 		for (unsigned int i=0; i<allAnimals.size(); i++) {
-			if (isAlreadyFed(i)) continue;
+			if (isAlreadyFed(i, animalsFed)) continue;
 			if (allAnimals[i]->hungerLevel() > hunger) {
 				animal_index = i;
 				hunger = allAnimals[i]->hungerLevel();
