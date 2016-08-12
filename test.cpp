@@ -444,9 +444,6 @@ TestResult test_hamish_2() {
 
 TestResult test_hamish_3() {
 	
-	//3.3.1
-	ASSERT(ZooManagementSystem::author() == "hone075");
-	
 	//3.3.2
 	ZooManagementSystem zms(300.15);
 	EXPECT_SIGMA(zms.getBalance(), 300.15);
@@ -506,8 +503,6 @@ TestResult test_hamish_3() {
 	an = zms.getAnimals();
 	ASSERT(an[0]->hungerLevel() == 2200);
 	ASSERT(an[1]->hungerLevel() == 250);	
-	
-	//3.3.7
 	
 	//3.3.8
 	double cost;
@@ -581,8 +576,6 @@ TestResult test_hamish_3() {
 	ASSERT(quantity_eaten == 1);
 	
     return TR_PASS;
-	
-	/////////todo: use const variables
 }
 
 TestResult test_hamish_4() {
@@ -603,8 +596,8 @@ TestResult test_hamish_4() {
 	zms.addFood(Food("steak",0,0));		//0
 	zms.addFood(Food("mouse",0,1)); 	//1
 	zms.addFood(Food("fish",0,0));		//2
-	zms.addFood(Food("banana",0,0));	//3
-	zms.addFood(Food("watermelon",0,0));//4 
+	zms.addFood(Food("banana",0,1));	//3
+	zms.addFood(Food("watermelon",0,1));//4 
 	zms.addFood(Food("mealworms",0,0));	//5
 	zms.addFood(Food("hay",0,7600));	//6
 	zms.addFood(Food("egg",0,0));		//7
@@ -621,18 +614,28 @@ TestResult test_hamish_4() {
 	
 	// Add enough hay such that elephant eats and is 800 hungry like monkey
 	ASSERT(zms.purchaseFood(cost, 6, 1) == true); //buy 1 hay
-	vector<Food> food = zms.getFood();
-	cout << "Food 6 Name = " << food[6].getName() << endl;
-	cout << "Food 6 Quantity = " << food[6].getQuantity() << endl;
-	cout << "Food 6 Energy = " << food[6].getEnergy() << endl;
 	zms.feedAllAnimals();
 	animals = zms.getAnimals();
 	ASSERT(animals[2]->hungerLevel() == 800); //monkey
-	
-	//cout << animals[4]->hungerLevel() << endl;
-	//cout << animals[4]->type() << endl; //2
-	//cout << animals[4]->likesFood(Food("hay",0,7600)) << endl; //1
 	ASSERT(animals[4]->hungerLevel() == 800); //elephant
+
+	// Monkey should eat bananas now as higher index
+	ASSERT(zms.purchaseFood(cost, 3, 800) == true); //buy 800 hay
+	zms.feedAllAnimals();
+	animals = zms.getAnimals();
+	ASSERT(animals[2]->hungerLevel() == 0); //monkey
+	ASSERT(animals[4]->hungerLevel() == 800); //elephant
+
+	zms.resetAllAnimals(); //now no food and animals hungry
+
+	ASSERT(zms.purchaseFood(cost, 3, 8400) == true); //buy 8400 banana
+	ASSERT(zms.purchaseFood(cost, 6, 8400) == true); //buy 8400 hay
+	zms.feedAllAnimals();
+	animals = zms.getAnimals();
+	ASSERT(animals[4]->hungerLevel() == 0); //elephant
+	vector<Food> fd = zms.getFood();
+	ASSERT(fd[3].getQuantity() == 0);
+	ASSERT(fd[6].getQuantity() == 8400);
 
 	return TR_PASS;
 }
@@ -724,5 +727,6 @@ int main(int argc, char const* argv[]) {
          << "-------------------------------------------------\n" << endl;
 
     // Return 0 if everything was ok
+	//system("pause");
     return 0;
 }
