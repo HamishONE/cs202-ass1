@@ -3,10 +3,10 @@ CXXFLAGS = -Wall -g
 
 all: zms zms_test
 
-zms: main.cpp Zoo/*.cpp Zoo/*.hpp
+zms: main.cpp Zoo/*.cpp
 	$(CXX) $(CXXFLAGS) -o zms $^
 
-zms_test: test.cpp Zoo/*.cpp Zoo/*.hpp
+zms_test: test.cpp Zoo/*.cpp
 	$(CXX) $(CXXFLAGS) -o zms_test $^
 
 test: zms_test
