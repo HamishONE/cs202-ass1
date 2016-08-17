@@ -7,7 +7,7 @@ Otter::Otter() {
 	resetToHungry();
 	animalType = AT_OTTER;
 	
-	foodsEaten[0] = "fish";
-	foodsEaten[1] = "mouse";
-	foodsEaten[2] = "";
+	foodsEaten.push_back("fish");
+	foodsEaten.push_back("mouse");
+	foodsEaten.push_back("");
 }

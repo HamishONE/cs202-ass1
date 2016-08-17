@@ -7,7 +7,6 @@ Snake::Snake() {
 	resetToHungry();
 	animalType = AT_SNAKE;
 	
-	foodsEaten[0] = "mouse";
-	foodsEaten[1] = "egg";
-	foodsEaten[2] = "";
+	foodsEaten.push_back("mouse");
+	foodsEaten.push_back("egg");
 }

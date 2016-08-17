@@ -7,7 +7,7 @@ Lion::Lion() {
 	resetToHungry();
 	animalType = AT_LION;
 	
-	foodsEaten[0] = "steak";
-	foodsEaten[1] = "mouse";
-	foodsEaten[2] = "fish";
+	foodsEaten.push_back("steak");
+	foodsEaten.push_back("mouse");
+	foodsEaten.push_back("fish");
 }

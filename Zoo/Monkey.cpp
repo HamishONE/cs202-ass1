@@ -7,7 +7,7 @@ Monkey::Monkey() {
 	resetToHungry();
 	animalType = AT_MONKEY;
 	
-	foodsEaten[0] = "banana";
-	foodsEaten[1] = "watermelon";
-	foodsEaten[2] = "mealworms";
+	foodsEaten.push_back("banana");
+	foodsEaten.push_back("watermelon");
+	foodsEaten.push_back("mealworms");
 }

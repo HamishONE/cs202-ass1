@@ -67,6 +67,7 @@ vector<Animal*> ZooManagementSystem::getAnimals() const {
 }
 
 bool ZooManagementSystem::addAnimal(Animal::AnimalType new_animal_type) {
+	
 	// TRY TO MAKE NICER
 	Animal *animal;	
 	if (new_animal_type == Animal::AT_MONKEY) animal = new Monkey();

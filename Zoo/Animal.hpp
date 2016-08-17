@@ -1,10 +1,9 @@
 #ifndef ANIMAL_HPP
 #define ANIMAL_HPP
 
+#include <vector>
 #include <string>
 #include "Food.hpp"
-
-//class Food; //TODO: ????????
 
 /*
 The Animal class is a pure virtual base class for all Animal classes. It defines the interface
@@ -74,7 +73,7 @@ protected:
 	unsigned int hunger;
 	unsigned int defaultHunger;
 	AnimalType animalType;
-	std::string foodsEaten[3];
+	std::vector<std::string> foodsEaten;
 };
 
 #endif /* end of include guard: ANIMAL_HPP */

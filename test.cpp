@@ -117,6 +117,12 @@ TestResult test_FoodConsume() {
     return TR_PASS;
 }
 
+const int HUNGER_MAX_MONKEY = 800;
+const int HUNGER_MAX_LION = 2200;
+const int HUNGER_MAX_ELEPHANT = 8400;
+const int HUNGER_MAX_SNAKE = 250;
+const int HUNGER_MAX_OTTER = 750;
+
 #ifdef ENABLE_T2_TESTS
 /*
 Test the behavior of the Monkey class. This test doesn't test feeding behavior.
@@ -124,11 +130,34 @@ Test the behavior of the Monkey class. This test doesn't test feeding behavior.
 TestResult test_Monkey() {
     Animal* monkey = new Monkey();
     ASSERT(monkey->type() == Animal::AT_MONKEY);
-    ASSERT(monkey->hungerLevel() == 800);
+    ASSERT(monkey->hungerLevel() == HUNGER_MAX_MONKEY);
     ASSERT(monkey->likesFood(Food("banana", 0, 0)));
     ASSERT(monkey->likesFood(Food("mealworms", 0, 0)));
     ASSERT(monkey->likesFood(Food("watermelon", 0, 0)));
     ASSERT(!monkey->likesFood(Food("hay", 0, 0)));
+    delete monkey;
+
+    return TR_PASS;
+}
+
+/*
+Test the some of the Monkey's feeding behaviour.
+*/
+TestResult test_MonkeyBasicFeeding() {
+    Animal* monkey = new Monkey();
+    // Test other dislikes
+    ASSERT(!monkey->likesFood(Food("mouse", 0, 0)));
+    ASSERT(!monkey->likesFood(Food("fish", 0, 0)));
+    ASSERT(!monkey->likesFood(Food("egg", 0, 0)));
+    ASSERT(!monkey->likesFood(Food("steak", 0, 0)));
+    // Test feeding behaviour
+    Food watermelon("watermelon", 6.0, 385);
+    watermelon.purchase(20);
+    // test watermelon (shouldn't trigger any special conditions)
+    ASSERT(monkey->hungerLevel() == HUNGER_MAX_MONKEY);
+    ASSERT(monkey->feed(watermelon) == 3); // needs to eat at least 3 watermelon to be full
+    ASSERT(monkey->hungerLevel() == 0); // monkey not hungry anymore
+    ASSERT(watermelon.getQuantity() == 17); // 3 consumed
     delete monkey;
 
     return TR_PASS;
@@ -140,11 +169,34 @@ Test the behavior of the Lion class. This test doesn't test feeding behavior.
 TestResult test_Lion() {
     Animal* lion = new Lion();
     ASSERT(lion->type() == Animal::AT_LION);
-    ASSERT(lion->hungerLevel() == 2200);
+    ASSERT(lion->hungerLevel() == HUNGER_MAX_LION);
     ASSERT(lion->likesFood(Food("steak", 0, 0)));
     ASSERT(lion->likesFood(Food("mouse", 0, 0)));
     ASSERT(lion->likesFood(Food("fish", 0, 0)));
     ASSERT(!lion->likesFood(Food("mealworms", 0, 0)));
+    delete lion;
+
+    return TR_PASS;
+}
+
+/*
+Test the some of the Lion's feeding behaviour.
+*/
+TestResult test_LionBasicFeeding() {
+    Animal* lion = new Lion();
+    // Test other dislikes
+    ASSERT(!lion->likesFood(Food("banana", 0, 0)));
+    ASSERT(!lion->likesFood(Food("watermelon", 0, 0)));
+    ASSERT(!lion->likesFood(Food("hay", 0, 0)));
+    ASSERT(!lion->likesFood(Food("egg", 0, 0)));
+    // Test feeding behaviour
+    Food steak("steak", 15.8, 760);
+    steak.purchase(20);
+    // test steak (shouldn't trigger any special conditions)
+    ASSERT(lion->hungerLevel() == HUNGER_MAX_LION);
+    ASSERT(lion->feed(steak) == 3); // needs to eat at least 3 steaks to be full
+    ASSERT(lion->hungerLevel() == 0); // lion not hungry anymore
+    ASSERT(steak.getQuantity() == 17); // 3 consumed
     delete lion;
 
     return TR_PASS;
@@ -156,11 +208,34 @@ Test the behavior of the Elephant class. This test doesn't test feeding behavior
 TestResult test_Elephant() {
     Animal* elephant = new Elephant();
     ASSERT(elephant->type() == Animal::AT_ELEPHANT);
-    ASSERT(elephant->hungerLevel() == 8400);
+    ASSERT(elephant->hungerLevel() == HUNGER_MAX_ELEPHANT);
     ASSERT(elephant->likesFood(Food("banana", 0, 0)));
     ASSERT(elephant->likesFood(Food("hay", 0, 0)));
     ASSERT(elephant->likesFood(Food("watermelon", 0, 0)));
     ASSERT(!elephant->likesFood(Food("mouse", 0, 0)));
+    delete elephant;
+
+    return TR_PASS;
+}
+
+/*
+Test the some of the Elephant's feeding behaviour.
+*/
+TestResult test_ElephantBasicFeeding() {
+    Animal* elephant = new Elephant();
+    // Test other dislikes
+    ASSERT(!elephant->likesFood(Food("steak", 0, 0)));
+    ASSERT(!elephant->likesFood(Food("egg", 0, 0)));
+    ASSERT(!elephant->likesFood(Food("fish", 0, 0)));
+    ASSERT(!elephant->likesFood(Food("mealworms", 0, 0)));
+    // Test feeding behaviour
+    Food hay("hay", 10.2, 960);
+    hay.purchase(20);
+    // test hay (shouldn't trigger any special conditions)
+    ASSERT(elephant->hungerLevel() == HUNGER_MAX_ELEPHANT);
+    ASSERT(elephant->feed(hay) == 9); // needs to eat at least 9 units of hay to be full
+    ASSERT(elephant->hungerLevel() == 0); // elephant not hungry anymore
+    ASSERT(hay.getQuantity() == 11); // 9 consumed
     delete elephant;
 
     return TR_PASS;
@@ -172,10 +247,34 @@ Test the behavior of the Snake class. This test doesn't test feeding behavior.
 TestResult test_Snake() {
     Animal* snake = new Snake();
     ASSERT(snake->type() == Animal::AT_SNAKE);
-    ASSERT(snake->hungerLevel() == 250);
+    ASSERT(snake->hungerLevel() == HUNGER_MAX_SNAKE);
     ASSERT(snake->likesFood(Food("mouse", 0, 0)));
     ASSERT(snake->likesFood(Food("egg", 0, 0)));
     ASSERT(!snake->likesFood(Food("hay", 0, 0)));
+    delete snake;
+
+    return TR_PASS;
+}
+
+/*
+Test the some of the Snake's feeding behaviour.
+*/
+TestResult test_SnakeBasicFeeding() {
+    Animal* snake = new Snake();
+    // Test other dislikes
+    ASSERT(!snake->likesFood(Food("steak", 0, 0)));
+    ASSERT(!snake->likesFood(Food("banana", 0, 0)));
+    ASSERT(!snake->likesFood(Food("watermelon", 0, 0)));
+    ASSERT(!snake->likesFood(Food("mealworms", 0, 0)));
+    ASSERT(!snake->likesFood(Food("fish", 0, 0)));
+    // Test feeding behaviour
+    Food mouse("mouse", 2.0, 250);
+    mouse.purchase(20);
+    // test mouse (shouldn't trigger any special conditions)
+    ASSERT(snake->hungerLevel() == HUNGER_MAX_SNAKE);
+    ASSERT(snake->feed(mouse) == 1); // needs to eat at least 1 mouse to be full
+    ASSERT(snake->hungerLevel() == 0); // snake not hungry anymore
+    ASSERT(mouse.getQuantity() == 19); // 1 consumed
     delete snake;
 
     return TR_PASS;
@@ -187,10 +286,34 @@ Test the behavior of the Otter class. This test doesn't test feeding behavior.
 TestResult test_Otter() {
     Animal* otter = new Otter();
     ASSERT(otter->type() == Animal::AT_OTTER);
-    ASSERT(otter->hungerLevel() == 750);
+    ASSERT(otter->hungerLevel() == HUNGER_MAX_OTTER);
     ASSERT(otter->likesFood(Food("fish", 0, 0)));
     ASSERT(otter->likesFood(Food("mouse", 0, 0)));
     ASSERT(!otter->likesFood(Food("watermelon", 0, 0)));
+    delete otter;
+
+    return TR_PASS;
+}
+
+/*
+Test the some of the Otter's feeding behaviour.
+*/
+TestResult test_OtterBasicFeeding() {
+    Animal* otter = new Otter();
+    // Test other dislikes
+    ASSERT(!otter->likesFood(Food("steak", 0, 0)));
+    ASSERT(!otter->likesFood(Food("egg", 0, 0)));
+    ASSERT(!otter->likesFood(Food("banana", 0, 0)));
+    ASSERT(!otter->likesFood(Food("hay", 0, 0)));
+    ASSERT(!otter->likesFood(Food("mealworms", 0, 0)));
+    // Test feeding behaviour
+    Food fish("fish", 7.6, 563);
+    fish.purchase(20);
+    // test fish (shouldn't trigger any special conditions)
+    ASSERT(otter->hungerLevel() == HUNGER_MAX_OTTER);
+    ASSERT(otter->feed(fish) == 2); // needs to eat at least 2 units of fish to be full
+    ASSERT(otter->hungerLevel() == 0); // otter not hungry anymore
+    ASSERT(fish.getQuantity() == 18); // 2 consumed
     delete otter;
 
     return TR_PASS;
@@ -654,10 +777,15 @@ vector<TestResult (*)()> generateTests() {
     tests.push_back(&test_FoodConsume);
 #ifdef ENABLE_T2_TESTS
     tests.push_back(&test_Monkey);
+    tests.push_back(&test_MonkeyBasicFeeding);
     tests.push_back(&test_Lion);
+    tests.push_back(&test_LionBasicFeeding);
     tests.push_back(&test_Elephant);
+    tests.push_back(&test_ElephantBasicFeeding);
     tests.push_back(&test_Snake);
+    tests.push_back(&test_SnakeBasicFeeding);
     tests.push_back(&test_Otter);
+    tests.push_back(&test_OtterBasicFeeding);
 #endif /*ENABLE_T2_TESTS*/
 #ifdef ENABLE_T3_TESTS
     tests.push_back(&test_UPI);
@@ -727,6 +855,5 @@ int main(int argc, char const* argv[]) {
          << "-------------------------------------------------\n" << endl;
 
     // Return 0 if everything was ok
-	//system("pause");
     return 0;
 }

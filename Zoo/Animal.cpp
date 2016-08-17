@@ -16,8 +16,9 @@ void Animal::resetToHungry() {
 }
 
 bool Animal::likesFood(const Food& food) const {
+		
 	std::string name = food.getName();
-	for (unsigned int i=0; i<3; i++) {
+	for (unsigned int i=0; i<foodsEaten.size(); i++) {
 		if (name.compare(foodsEaten[i]) == 0) return true;
 	}
 	return false;

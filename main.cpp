@@ -215,8 +215,8 @@ void feedAnimal(ZooManagementSystem& zms) {
     switch (result) {
     case ZooManagementSystem::FR_SUCCESS:
         cout << "Animal " << animalTypeToString(animals[animal_index]->type()) << " ate " << quantity_eaten << " of food " << food[food_index].getName() << "\n"
-             << food[food_index].getQuantity() << " of food " << food[food_index].getName() << " remaining.\n";
-		break;
+             << food[food_index].getQuantity() << " of food " << food[food_index].getName() << "remaining.\n";
+        break;
     case ZooManagementSystem::FR_INVALID_ANIMAL:
         cout << "Error: Animal index " << animal_index << " is invalid\n";
         break;
