@@ -27,8 +27,13 @@ unsigned int Food::getEnergy() const {
 }
 
 unsigned int Food::consume(unsigned int count) {
+	
+	// Comsume the lesser of the quantity provided or the quantity avaliable
 	unsigned int toComsume = (quant > count) ? count : quant;
+	
+	// Reduce the quantity avaliable by this ammount
 	quant -= toComsume;
+	
     return toComsume;
 }
 

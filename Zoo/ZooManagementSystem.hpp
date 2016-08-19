@@ -6,8 +6,6 @@
 
 #include "Food.hpp"
 #include "Animal.hpp"
-
-// Hopefully remove
 #include "Monkey.hpp"
 #include "Elephant.hpp"
 #include "Otter.hpp"
