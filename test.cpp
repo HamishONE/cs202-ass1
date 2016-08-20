@@ -763,6 +763,78 @@ TestResult test_hamish_4() {
 	return TR_PASS;
 }
 
+TestResult test_AutoFeeding() {
+	//Setup the Zoo
+	ZooManagementSystem zms(10000.0);
+	zms.addFood(Food("banana", 4.5, 250));
+    zms.addFood(Food("steak", 15.8, 760));
+    zms.addFood(Food("watermelon", 6, 385));
+    zms.addFood(Food("mouse", 2, 250));
+    zms.addFood(Food("egg", 0.6, 100));
+    zms.addFood(Food("mealworms", 4.75, 310));
+    zms.addFood(Food("fish", 7.6, 563));
+    zms.addFood(Food("hay", 10.2, 960));
+	double cost;	
+	zms.purchaseFood(cost, 0, 20);  //banana
+	zms.purchaseFood(cost, 1, 5);	//steak
+	zms.purchaseFood(cost, 2, 15);	//watermelon
+	zms.purchaseFood(cost, 3, 20);	//mouse
+	zms.purchaseFood(cost, 4, 20);	//egg
+	zms.purchaseFood(cost, 5, 15);	//mealworms
+	zms.purchaseFood(cost, 6, 20);	//fish
+	zms.purchaseFood(cost, 7, 10);	//hay
+	zms.addAnimal(Animal::AT_ELEPHANT);
+	zms.addAnimal(Animal::AT_MONKEY);	
+	zms.addAnimal(Animal::AT_LION);
+	zms.addAnimal(Animal::AT_SNAKE);
+	zms.addAnimal(Animal::AT_ELEPHANT);
+	zms.addAnimal(Animal::AT_MONKEY);
+	zms.addAnimal(Animal::AT_OTTER);
+	//Implement Auto Feeding
+	zms.feedAllAnimals();
+	//Check results
+	vector<Animal*> animals = zms.getAnimals();
+	vector<Food> foods = zms.getFood();
+	ASSERT(animals[0]->hungerLevel() == 0);
+	ASSERT(animals[1]->hungerLevel() == 0);
+	ASSERT(animals[2]->hungerLevel() == 0);
+	ASSERT(animals[3]->hungerLevel() == 0);
+	ASSERT(animals[4]->hungerLevel() == 0);
+	ASSERT(animals[5]->hungerLevel() == 0);
+	ASSERT(animals[6]->hungerLevel() == 0);
+	ASSERT(foods[0].getQuantity() == 0);
+	ASSERT(foods[1].getQuantity() == 5);
+	ASSERT(foods[2].getQuantity() == 6);
+	ASSERT(foods[3].getQuantity() == 11);
+	ASSERT(foods[4].getQuantity() == 17);
+	ASSERT(foods[5].getQuantity() == 9);
+	ASSERT(foods[6].getQuantity() == 18);
+	ASSERT(foods[7].getQuantity() == 1); 
+	//Try it again
+	zms.resetAllAnimals();
+	zms.feedAllAnimals();
+	//Check results
+	vector<Animal*> animals2 = zms.getAnimals();
+	vector<Food> foods2 = zms.getFood();
+	ASSERT(animals2[0]->hungerLevel() == 5130);
+	ASSERT(animals2[1]->hungerLevel() == 0);
+	ASSERT(animals2[2]->hungerLevel() == 0);
+	ASSERT(animals2[3]->hungerLevel() == 0);
+	ASSERT(animals2[4]->hungerLevel() == 8400);	
+	ASSERT(animals2[5]->hungerLevel() == 0);
+	ASSERT(animals2[6]->hungerLevel() == 0);
+	ASSERT(foods2[0].getQuantity() == 0);
+	ASSERT(foods2[1].getQuantity() == 5);
+	ASSERT(foods2[2].getQuantity() == 0);
+	ASSERT(foods2[3].getQuantity() == 11);
+	ASSERT(foods2[4].getQuantity() == 14);
+	ASSERT(foods2[5].getQuantity() == 3);
+	ASSERT(foods2[6].getQuantity() == 12);
+	ASSERT(foods2[7].getQuantity() == 0);
+ 
+	return TR_PASS;
+}
+
 //////////////////////////////////////////////////
 
 /*
@@ -803,6 +875,8 @@ vector<TestResult (*)()> generateTests() {
 	tests.push_back(&test_hamish_2);
 	tests.push_back(&test_hamish_3);
 	tests.push_back(&test_hamish_4);
+	
+	tests.push_back(&test_AutoFeeding);
 	////////////////////////////////
 
     return tests;
